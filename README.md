@@ -8,7 +8,7 @@ $ echo "foo" | epipe
 
 Installation
 ------------
-Download and put point your PATH at the location of epipe:
+Download and point your PATH at the location of epipe:
 ```
 $ export PATH=/path/to/epipe-dir:$PATH
 ```
@@ -19,6 +19,6 @@ Usage
 epipe redirects stdin to an emacs buffer
 Example: 'echo "foo" | epipe'
 
-    -v	Verbose mode also prints output to stdout.
+    -v	Verbose mode also output to stdout.
     -h	Shows this message.
 ``` 
