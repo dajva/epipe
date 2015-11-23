@@ -1,0 +1,50 @@
+#!/bin/sh
+
+emacs=emacs
+show="NO"
+
+trap cleanup EXIT
+
+usage() {
+    self=$(basename $0)
+    echo "$self redirects stdin to an emacs buffer"
+    echo -e "Example: 'echo \"foo\" | epipe'"
+    echo
+    echo -e "\t-v\tVerbose mode also prints output to stdout."
+    echo -e "\t-h\tShows this message."
+}
+
+cleanup() {
+    if [ -f "$tmpfile" ]
+    then
+        rm "$tmpfile"
+    fi
+}
+
+while [ $# -gt 0 ]
+do
+    case $1 in
+        -v) show="YES"; shift;;
+        -h) usage; exit 0; shift;;
+        *) echo "Unknown option: '$1'"; usage; exit 1;;
+    esac
+done
+
+tmpfile=$(mktemp --tmpdir=/tmp epipe.XXXXXX)
+elisp="
+(let ((find-file-hook
+       '((lambda ()
+           (turn-on-auto-revert-tail-mode)
+           (goto-char (point-max))
+           (cd \"$(pwd)\")))))
+  (find-file \"$tmpfile\"))"
+$emacs --eval "$elisp" > /dev/null &
+
+if [ "$show" = "NO" ]
+then
+    cat > $tmpfile
+else
+    tee $tmpfile
+fi
+
+
