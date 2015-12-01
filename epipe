@@ -3,8 +3,6 @@
 emacs=emacs
 show="NO"
 
-trap cleanup EXIT
-
 usage() {
     self=$(basename $0)
     echo "$self redirects stdin to an emacs buffer"
@@ -12,13 +10,6 @@ usage() {
     echo
     echo -e "\t-v\tVerbose mode also prints output to stdout."
     echo -e "\t-h\tShows this message."
-}
-
-cleanup() {
-    if [ -f "$tmpfile" ]
-    then
-        rm "$tmpfile"
-    fi
 }
 
 while [ $# -gt 0 ]
