@@ -26,6 +26,8 @@ elisp="
 (let ((find-file-hook
        '((lambda ()
            (turn-on-auto-revert-tail-mode)
+           (setq auto-revert-interval 1)
+           (auto-revert-set-timer)
            (goto-char (point-max))
            (cd \"$(pwd)\")))))
   (find-file \"$tmpfile\"))"
