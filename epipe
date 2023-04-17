@@ -10,7 +10,7 @@ usage() {
     echo "$self redirects stdin to an emacs buffer"
     echo -e "Example: 'echo \"foo\" | epipe'"
     echo
-    echo -e "\t-e CMD\t Use emacs CMD."
+    echo -e "\t-e CMD\t Use emacs CMD (default is EPIPE_EMACS=${EPIPE_EMACS})."
     echo -e "\t-b NAME\t Piped-to buffer should have NAME."
     echo -e "\t-I INT\t Use INT as revert interval."
     echo -e "\t-v\t Verbose mode also prints output to stdout."
