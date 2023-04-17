@@ -2,20 +2,23 @@
 
 emacs=emacs
 show="NO"
+buffer_name=""
 
 usage() {
     self=$(basename $0)
     echo "$self redirects stdin to an emacs buffer"
     echo -e "Example: 'echo \"foo\" | epipe'"
     echo
-    echo -e "\t-v\tVerbose mode also prints output to stdout."
-    echo -e "\t-h\tShows this message."
+    echo -e "\t-b NAME\t Piped-to buffer should have NAME."
+    echo -e "\t-v\t Verbose mode also prints output to stdout."
+    echo -e "\t-h\t Shows this message."
 }
 
 while [ $# -gt 0 ]
 do
     case $1 in
         -v) show="YES"; shift;;
+        -b) shift; buffer_name=$1; shift;;
         -h) usage; exit 0; shift;;
         *) echo "Unknown option: '$1'"; usage; exit 1;;
     esac
@@ -29,7 +32,9 @@ elisp="
            (setq auto-revert-interval 1)
            (auto-revert-set-timer)
            (goto-char (point-max))
-           (cd \"$(pwd)\")))))
+           (cd \"$(pwd)\")
+           (unless (string-empty-p \"$buffer_name\")
+             (rename-buffer \"$buffer_name\"))))))
   (find-file \"$tmpfile\"))"
 $emacs --eval "$elisp" > /dev/null &
 
