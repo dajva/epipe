@@ -1,6 +1,6 @@
 #!/bin/sh
 
-emacs=emacs
+EPIPE_EMACS=${EPIPE_EMACS:-emacs}
 show="NO"
 buffer_name=""
 interval=1
@@ -21,7 +21,7 @@ while [ $# -gt 0 ]
 do
     case $1 in
         -v) show="YES"; shift;;
-        -e) shift; emacs=$1; shift;;
+        -e) shift; EPIPE_EMACS=$1; shift;;
         -b) shift; buffer_name=$1; shift;;
         -I) shift; interval=$1; shift;;
         -h) usage; exit 0; shift;;
@@ -41,7 +41,7 @@ elisp="
            (unless (string-empty-p \"$buffer_name\")
              (rename-buffer \"$buffer_name\"))))))
   (find-file \"$tmpfile\"))"
-$emacs --eval "$elisp" > /dev/null &
+${EPIPE_EMACS} --eval "$elisp" > /dev/null &
 
 if [ "$show" = "NO" ]
 then
