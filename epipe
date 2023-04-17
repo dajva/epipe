@@ -3,6 +3,7 @@
 emacs=emacs
 show="NO"
 buffer_name=""
+interval=1
 
 usage() {
     self=$(basename $0)
@@ -10,6 +11,7 @@ usage() {
     echo -e "Example: 'echo \"foo\" | epipe'"
     echo
     echo -e "\t-b NAME\t Piped-to buffer should have NAME."
+    echo -e "\t-I INT\t Use INT as revert interval."
     echo -e "\t-v\t Verbose mode also prints output to stdout."
     echo -e "\t-h\t Shows this message."
 }
@@ -19,6 +21,7 @@ do
     case $1 in
         -v) show="YES"; shift;;
         -b) shift; buffer_name=$1; shift;;
+        -I) shift; interval=$1; shift;;
         -h) usage; exit 0; shift;;
         *) echo "Unknown option: '$1'"; usage; exit 1;;
     esac
@@ -29,7 +32,7 @@ elisp="
 (let ((find-file-hook
        '((lambda ()
            (turn-on-auto-revert-tail-mode)
-           (setq auto-revert-interval 1)
+           (setq auto-revert-interval ${interval})
            (auto-revert-set-timer)
            (goto-char (point-max))
            (cd \"$(pwd)\")
